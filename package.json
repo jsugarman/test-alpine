@@ -1,0 +1,5 @@
+{
+  "name": "test-alpine",
+  "private": true,
+  "dependencies": {}
+}
