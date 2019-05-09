@@ -1,24 +1,23 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Example rails 5 app with Dockerfile to run the app in an Alpine (linux) container
 
-Things you may want to cover:
+* Prerequisites
+  - clone repo
+  - install docker (for mac or otherwise)
 
-* Ruby version
 
-* System dependencies
+* Build and run locally
 
-* Configuration
+Build:
+```
+docker build -f Dockerfile -t rails-alpine-test:latest .
+```
 
-* Database creation
+Run:
+```
+docker run -it -p 3000:3000 rails-alpine-test:latest
+```
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Test:
+[localhost:3000](http://localhost:3000)
