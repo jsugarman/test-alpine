@@ -4,10 +4,6 @@ MAINTAINER Joel Sugarman <joelsugarman@yahoo.co.uk>
 # fail early and print commands
 RUN set -ex
 
-# Add an non-root "system" user for further setup
-# RUN addgroup --system appgroup
-# RUN adduser --system appuser -G appgroup
-
 # Additional packages/libraries
 # - install regular stuff build-base
 # - install libxml2-dev libxslt-dev required for nokogiri
@@ -37,18 +33,9 @@ RUN adduser \
     --system appuser \
     -G appgroup
 
-# grant appgroup privileges on working_dir
-
-# list group memberships
-RUN cat /etc/group | grep appuser
-
-# list user details
-RUN cat /etc/passwd | grep appuser
-
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 RUN mkdir -p /usr/src/app/tmp
-RUN ls -la /usr/src
 
 # Env vars needed for asset precompilation but otherwise
 # only needed if using plain docker build, docker run
@@ -68,7 +55,6 @@ COPY Gemfile.lock Gemfile.lock
 USER appuser
 RUN gem install bundler -v 1.17.3
 RUN bundle config
-RUN echo $BUNDLE_APP_CONFIG
 
 # remove test development gems from default bundle install
 RUN bundle config --global without test:development
@@ -80,7 +66,6 @@ RUN bundle config --global without test:development
 RUN bundle config build.nokogiri --use-system-libraries
 
 RUN bundle install
-RUN ls -la ${BUNDLE_APP_CONFIG}
 
 ####################
 # DEPENDENCIES END #
@@ -91,14 +76,11 @@ COPY . .
 
 # take ownership of all app files
 USER root
-RUN ls -la /usr/src/app
 RUN chown -R appuser:appgroup /usr/src/
-RUN ls -la /usr/src/app
 
 # compile assets (note production environment set above)
 USER appuser
 RUN bundle exec rake assets:precompile
-RUN ls -la /usr/src/app/public/assets
 
 # Below only need if using plain docker build, docker run
 # ,not docker compose.
