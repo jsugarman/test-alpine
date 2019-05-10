@@ -25,7 +25,14 @@ Run containers:
 docker-compose up
 ```
 
-Create/migrate DB: with the docker containers running (`docker-compose up`) in another terminal
+Build and run:
+
+```bash
+docker-compose up --build
+```
+
+Create/migrate DB: with the docker containers running (`docker-compose up`)
+in another terminal
 
 ```bash
 # In another terminal while containers running
@@ -34,6 +41,7 @@ docker-compose run --rm web bundle exec rails db:migrate
 ```
 
 Interactive shell in web (app) container:
+
 ```text
 $ docker-compose exec web sh
 /app # rails console
@@ -42,6 +50,7 @@ irb(main):001:0> Employee.first
 
 Interactive shell in db container, login to postgres,
 connect to apps db, query first employee
+
 ```text
 $ docker-compose exec db sh
 /# psql -U postgres
@@ -122,3 +131,9 @@ docker container stop $(docker container ls -aq)
 docker container prune
 docker image prune -a
 ```
+
+#### Useful links
+
+[dockerize-a-rails-5-postgres-redis-sidekiq-action-cable-app-with-docker-compose](https://nickjanetakis.com/blog/dockerize-a-rails-5-postgres-redis-sidekiq-action-cable-app-with-docker-compose)
+
+[linuxize](https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/)
