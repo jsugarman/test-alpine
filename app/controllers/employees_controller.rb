@@ -15,8 +15,7 @@ class EmployeesController < ApplicationController
     @employee = Employee.new(employee_params)
     if @employee.save
       flash[:success] = "Employee created!"
-      # redirect_to @employee
-      redirect_to action: "show", id: @employee.id
+      redirect_to action: :show, id: @employee.id
     else
       flash[:error] = "Employee creation failed!"
       render action: :new
