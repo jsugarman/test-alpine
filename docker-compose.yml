@@ -1,0 +1,28 @@
+version: '3'
+services:
+ db:
+  image: postgres:9.6-alpine
+  stdin_open: true
+  tty: true
+  volumes:
+    - postgres_data:/var/lib/postgresql/data
+ web:
+  build: .
+  working_dir: /app
+  stdin_open: true
+  tty: true
+  environment:
+    RAILS_ENV: production
+    RACK_ENV: production
+    DATABASE_URL: postgres://postgres@db
+  command: bundle exec rails s -p 5000 -b '0.0.0.0'
+  volumes:
+   - .:/test_alpine
+
+  ports:
+   - "80:5000"
+  depends_on:
+   - db
+
+volumes:
+  postgres_data:

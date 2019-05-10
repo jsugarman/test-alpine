@@ -1,21 +1,30 @@
 FROM ruby:2.6.3-alpine3.9
 
 # install regular stuff
-# and extra dev libs required for nokogiri, at least
+# - extra libxml2-dev libxslt-dev required for nokogiri
+# - postgresql-dev required for postgres
+# - nodejs needed for ExecJS functionality
+# - yarn needed for asset compilation
+#
 RUN apk add --update \
   build-base \
   libxml2-dev \
   libxslt-dev \
-  nodejs
-
-# only needed for sqllite3
-RUN apk add sqlite-dev
+  postgresql-dev \
+  nodejs \
+  yarn
 
 # tidy up
 RUN rm -rf /var/cache/apk/*
 
 WORKDIR /app
 RUN mkdir -p /app/tmp
+
+# Env vars need for asset precompilation but otherwise
+# only needed if using plain docker build, docker run
+#
+ENV RAILS_ENV='production'
+ENV RACK_ENV='production'
 
 ######################
 # DEPENDENCIES START #
@@ -42,11 +51,15 @@ RUN bundle install
 # copy app contents from host to container
 COPY . .
 
-# install JS package managers
-RUN apk add yarn
-RUN RAILS_ENV=production bundle exec rake assets:precompile
+# compile assets (note production environment set above)
+RUN bundle exec rake assets:precompile
 
-# ENTRYPOINT ["rails", "server"]
-EXPOSE 3000
-CMD ["rails", "server", "-e", "production", "--port", "3000", "--binding", "0.0.0.0"]
-
+# Below only need if using plain docker build, docker run
+# ,not docker compose.
+# In such instances you can:
+# build: docker build -f Dockerfile -t rails-alpine-test:latest .
+# run: docker run -it -p 5000:5000 rails-alpine-test:latest
+# browser: localhost:5000
+#
+# EXPOSE 5000
+# CMD ["rails", "server", "-e", "production", "--port", "5000", "--binding", "0.0.0.0"]
