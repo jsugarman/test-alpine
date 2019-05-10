@@ -1,0 +1,10 @@
+Employee details
+<table>
+  <tr>
+    <td><%= @employee.first_name %></td>
+    <td><%= @employee.last_name %></td>
+    <td><%= @employee.age %></td>
+    <td><%= @employee.dob.to_s %></td>
+    <td><%= link_to('amend', edit_employee_path(@employee)) %></td>
+  </tr>
+<table>

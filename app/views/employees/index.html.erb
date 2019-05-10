@@ -1,0 +1,24 @@
+Employees
+<table>
+<% @employees.each_with_index do |employee, idx| %>
+  <tr>
+    <td><%= idx+1 %></td>
+    <td><%= employee.first_name %></td>
+    <td><%= employee.last_name %></td>
+    <td><%= employee.age %></td>
+    <td><%= employee.dob.to_s %></td>
+    <td><%= link_to('amend', 
+                    edit_employee_path(employee)) %></td>
+    <td>
+      <%= link_to('delete',
+            employee_path(employee),
+            method: :delete,
+            data: { confirm: 'Are you sure?' }
+          ) %>
+    </td>
+  </tr>
+<% end %>
+<table>
+<br/>
+<br/>
+<%= link_to('Add employee', new_employee_path) %>

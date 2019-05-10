@@ -1,0 +1,13 @@
+Edit employee
+
+<%= form_for(@employee, action: 'update') do |f|%>
+  <%= f.text_field :first_name %>
+  <br/>
+  <%= f.text_field :last_name %>
+  <br/>
+  <%= f.number_field :age %>
+  <br/>
+  <%= f.date_field :dob %>
+  <br/>
+  <%= f.submit "Save"%>
+<% end %>
