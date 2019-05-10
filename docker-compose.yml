@@ -7,8 +7,9 @@ services:
   volumes:
     - postgres_data:/var/lib/postgresql/data
  web:
+  user: appuser
   build: .
-  working_dir: /app
+  working_dir: /usr/src/app
   stdin_open: true
   tty: true
   environment:
@@ -16,8 +17,6 @@ services:
     RACK_ENV: production
     DATABASE_URL: postgres://postgres@db
   command: bundle exec rails s -p 5000 -b '0.0.0.0'
-  volumes:
-   - .:/test_alpine
 
   ports:
    - "80:5000"
